@@ -1,53 +1,8 @@
-function score () {
-    snow = sprites.createProjectileFromSprite(img`
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . 1 . . 9 9 . . 1 . . . . 
-. . . . . 1 . 9 9 . 1 . . . . . 
-. . . . . . 1 9 9 1 . . . . . . 
-. . . . 9 9 9 1 1 9 9 9 . . . . 
-. . . . 9 9 9 1 1 9 9 9 . . . . 
-. . . . . . 1 9 9 1 . . . . . . 
-. . . . . 1 . 9 9 . 1 . . . . . 
-. . . . 1 . . 9 9 . . 1 . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`, cloud2, 50, 100)
-    snow.x += 0
-    snow.y += Math.randomRange(0, 10)
+namespace SpriteKind {
+    export const badprojectile = SpriteKind.create()
 }
-function ball () {
-	
-}
-function raindrop () {
-	
-}
-function cloud () {
-    cloud2 = sprites.createProjectileFromSide(img`
-. . . . . . . . . . . . . . . . 
-. . . . d 1 d d . . . . . . . . 
-. . d d d d d d d d d 1 . . . . 
-. d d d d f d d d f d d d . . . 
-. 1 d d d d d d d d d d d . . . 
-. d d d d d d d d d d d d d . . 
-. . . d d f f f f f d d d 1 . . 
-. . . d d d d d d d d d d d . . 
-. . . . d 1 d d d d . d d d . . 
-. . . . . d d d . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`, 50, 100)
-}
-function hero () {
-    hero2 = sprites.create(img`
+function hero2 () {
+    hero = sprites.create(img`
 . . . . . . . . . . . . . . . . 
 . . . . . . 7 7 7 . . . . . . . 
 . . . . . 7 5 5 5 7 . . . . . . 
@@ -65,10 +20,39 @@ function hero () {
 . . . . . e e . e e . . . . . . 
 . . . . . . . . . . . . . . . . 
 `, SpriteKind.Player)
-    hero2.setPosition(126, 89)
+    hero.setPosition(126, 89)
 }
+function cloud2 () {
+    cloud = sprites.createProjectileFromSide(img`
+. . . . . . . . . . . . . . . . 
+. . . . d 1 d d . . . . . . . . 
+. . d d d d d d d d d 1 . . . . 
+. d d d d f d d d f d d d . . . 
+. 1 d d d d d d d d d d d . . . 
+. d d d d d d d d d d d d d . . 
+. . . d d f f f f f d d d 1 . . 
+. . . d d d d d d d d d d d . . 
+. . . . d 1 d d d d . d d d . . 
+. . . . . d d d . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, 50, 0)
+}
+function background () {
+    scene.setBackgroundColor(11)
+}
+function score () {
+    info.changeScoreBy(2)
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    game.over(false)
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    ball2 = sprites.createProjectileFromSprite(img`
+    ball = sprites.createProjectileFromSprite(img`
 . . . . . c c b b b . . . . . . 
 . . . . c b d d d d b . . . . . 
 . . . . c d d d d d d b b . . . 
@@ -85,13 +69,50 @@ c c 2 b c c c c b d d 2 b c c b
 . . c c c c c b b b b b b b c . 
 . . . . . . c c b b b b c c . . 
 . . . . . . . . c c c c . . . . 
-`, hero2, 0, -50)
+`, hero, 0, -50)
 })
-let ball2: Sprite = null
-let hero2: Sprite = null
-let cloud2: Sprite = null
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Projectile, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+})
+function raindrop () {
+    snow = sprites.createProjectileFromSprite(img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . 1 . . 9 9 . . 1 . . . . 
+. . . . . 1 . 9 9 . 1 . . . . . 
+. . . . . . 1 9 9 1 . . . . . . 
+. . . . 9 9 9 1 1 9 9 9 . . . . 
+. . . . 9 9 9 1 1 9 9 9 . . . . 
+. . . . . . 1 9 9 1 . . . . . . 
+. . . . . 1 . 9 9 . 1 . . . . . 
+. . . . 1 . . 9 9 . . 1 . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, cloud, 0, 100)
+    snow.y += 0
+    snow.x += Math.randomRange(-10, 200)
+}
 let snow: Sprite = null
+let ball: Sprite = null
+let cloud: Sprite = null
+let hero: Sprite = null
+background()
 hero()
-game.onUpdateInterval(1000, function () {
-	
+cloud()
+controller.moveSprite(hero, 200, 100)
+game.onUpdateInterval(200, function () {
+    raindrop()
+})
+game.onUpdateInterval(500, function () {
+    cloud()
+})
+game.onUpdateInterval(500, function () {
+    score()
+})
+game.onUpdateInterval(2250, function () {
+    cloud.setPosition(11, 0)
 })
